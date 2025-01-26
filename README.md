@@ -1,6 +1,5 @@
 # Employee Assistance System
 
-
 # Setup Instructions
 
 ### Step 1: Clone the Repository
@@ -27,3 +26,12 @@ Start the development server by running:
 
 <pre> <code> npm run dev </code></pre>
 Your Employee Assistance System should now be running locally.
+
+
+![alt text](images/AI3_Pic1.png)
+![alt text](images/AI3_Pic2.png)
+![alt text](images/AI3_Pic3.png)
+![alt text](images/AI3_Pic4.png)
+![alt text](images/AI3_Pic5.png)
+![alt text](images/AI3_Pic6.png)
+![alt text](images/AI3_Pic7.png)
