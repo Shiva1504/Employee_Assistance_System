@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { X, Upload, CheckCircle } from 'lucide-react';
 import { Task } from '../types/task';
 
 interface TasksModalProps {
@@ -55,7 +55,7 @@ export default function TasksModal({ onClose, tasks, setTasks }: TasksModalProps
     formData.append('subject', 'New Task Assignment');
     formData.append('from_name', 'Employee Assistance System');
     formData.append('title', newTask.title || '');
-    formData.append('description', newTask.description || '');
+    formData.append('description', newTask.description);
     formData.append('priority', newTask.priority || 'medium');
     formData.append('due_date', newTask.dueDate || '');
 
@@ -109,6 +109,7 @@ export default function TasksModal({ onClose, tasks, setTasks }: TasksModalProps
           <h2 className="text-xl font-semibold dark:text-white">Employee Tasks</h2>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
@@ -165,7 +166,7 @@ export default function TasksModal({ onClose, tasks, setTasks }: TasksModalProps
             .sort((a, b) => {
               if (a.completed !== b.completed) return Number(a.completed) - Number(b.completed);
               const priorityOrder = { high: 1, medium: 2, low: 3 };
-              return priorityOrder[a.priority] - priorityOrder[b.priority];
+              return priorityOrder[a.priority || 'medium'] - priorityOrder[b.priority || 'medium'];
             })
             .map((task) => (
               <div key={task.id} className="border rounded-lg p-4 dark:border-gray-700">

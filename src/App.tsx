@@ -290,50 +290,112 @@ function App() {
           </div>
         )}
 
-        {activeTab === 'complaints' && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-              Submit a Complaint
-            </h2>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Description
-                </label>
-                <textarea
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                />
+{activeTab === 'complaints' && (
+  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+    <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+      Submit a Complaint
+    </h2>
+    <form
+      className="space-y-4"
+      onSubmit={async (e) => {
+        e.preventDefault();
 
-<div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Upload Image
-                </label>
-                <input
-                  type="file"
-                  className="w-full max-w-xs px-4 py-2 rounded-lg focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
+        // Typecast e.target to HTMLFormElement
+        const form = e.target as HTMLFormElement;
 
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Submit Complaint
-              </button>
-            </form>
-          </div>
-        )}
+        const name = (form.elements.namedItem('name') as HTMLInputElement)?.value;
+        const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value;
+        const description = (form.elements.namedItem('description') as HTMLTextAreaElement)?.value;
+        const file = (form.elements.namedItem('file') as HTMLInputElement)?.files?.[0];
+        const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+        if (!accessKey || !name || !subject || !description) {
+          alert("Please fill out all required fields.");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("access_key", accessKey);
+        formData.append("name", name);
+        formData.append("subject", subject);
+        formData.append("description", description);
+
+        if (file) {
+          formData.append("file", file, file.name);
+        }
+
+        try {
+          const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert("Complaint submitted successfully!");
+            form.reset(); // Reset the form after successful submission
+          } else {
+            alert("Failed to submit complaint. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error submitting complaint:", error);
+          alert("An error occurred while submitting your complaint.");
+        }
+      }}
+    >
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Name
+        </label>
+        <input
+          type="text"
+          name="name"
+          required
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Subject
+        </label>
+        <input
+          type="text"
+          name="subject"
+          required
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Description
+        </label>
+        <textarea
+          rows={4}
+          name="description"
+          required
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Upload Image
+        </label>
+        <input
+          type="file"
+          name="file"
+          className="w-full max-w-xs px-4 py-2 rounded-lg focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+      >
+        Submit Complaint
+      </button>
+    </form>
+  </div>
+)}
+
       </main>
 
       {/* Input Area */}
