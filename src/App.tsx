@@ -152,11 +152,11 @@ function App() {
     <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col`}>
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <h1 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white text-center sm:text-left">
             Employee Assistance System
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-center">
             <AIProviderSelector
               currentProvider={currentProvider}
               onProviderChange={setCurrentProvider}
@@ -183,10 +183,10 @@ function App() {
       {/* Navigation */}
       <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex space-x-4">
+          <div className="flex overflow-x-auto pb-2 sm:pb-0 space-x-2 sm:space-x-4">
             <button
               onClick={() => setActiveTab('chat')}
-              className={`px-4 py-3 text-sm font-medium border-b-2 ${
+              className={`px-3 py-2 text-xs sm:text-sm font-medium border-b-2 ${
                 activeTab === 'chat'
                   ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                   : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -402,7 +402,7 @@ function App() {
       {activeTab === 'chat' && (
         <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
           <div className="max-w-4xl mx-auto px-4 py-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <VoiceInput
                 onVoiceInput={handleVoiceInput}
                 isListening={isListening}
@@ -415,7 +415,7 @@ function App() {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Type your message..."
-                className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 min-w-[50%] text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               />
               <button
                 onClick={handleSendMessage}
